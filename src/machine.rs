@@ -89,16 +89,8 @@ impl Machine<'_> {
             None => return Some(Acceptance::Rejected), // não há transições para o estado atual
         };
 
-        // se estamos na posição 0, garanta que não há um movimento à esquerda antes de
-        // aplicar uma transição
-        if self.current_position == 0 {
-            if let Some(movement) = transition.move_to {
-                // no momento, expressões let são instáveis com &&
-                // https://github.com/rust-lang/rust/issues/53667
-                if movement == Movement::L {
-                    return Some(Acceptance::Rejected);
-                }
-            }
+        if self.limited_left(transition) {
+            return Some(Acceptance::Rejected);
         }
 
         let undo = self.apply(transition);
@@ -137,7 +129,26 @@ impl Machine<'_> {
         if self.get_transition().is_none() {
             return Some(Acceptance::Rejected);
         }
+        if self.limited_left(self.get_transition().unwrap()) {
+            return Some(Acceptance::Rejected);
+        }
         None
+    }
+
+    /// Retorna `true` caso a máquina esteja atualmente "limitada pela esquerda", isso é,
+    /// caso ela esteja na posição zero da fita e tenha como próxima etapa uma transição
+    /// com movimento para a esquerda.
+    fn limited_left(&self, transition: &Transition) -> bool {
+        if self.current_position == 0 {
+            if transition.move_to.is_none() {
+                return false;
+            }
+            let movement = transition.move_to.unwrap();
+            if movement == Movement::L {
+                return true;
+            }
+        }
+        false
     }
 
     /// Retorna `true` se a máquina estiver em um estado final.
