@@ -55,9 +55,6 @@ impl Machine<'_> {
     ///
     /// # Erros
     /// Retorna um erro caso a fita possua símbolos não contidos no alfabeto.
-    ///
-    /// # Panic
-    /// Caso a fita seja vazia, inicia um pânico.
     pub fn new(septuple: &Septuple, mut tape: Vec<char>) -> Result<Machine, InvalidSymbolError> {
         let has_invalid_symbol = tape
             .iter()
