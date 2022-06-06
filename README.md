@@ -28,3 +28,35 @@ entrada, mostrando a fita a cada passo da execução.
 4. O grupo deverá preparar apresentação contendo a) descrição geral do algoritmo, b) estruturas de
 dados utilizadas para representar a sétupla, c) MTs testadas durante a implementação e d) o que é
 apresentado como saída do algoritmo.
+
+## Executando o projeto
+
+Para executar o projeto, é necessário uma instalação funcional de uma toolchain `Rust` com o
+gerenciador de pacotes `Cargo`.  
+O processo de execução consiste em simplesmente executar o programa, via `cargo run` ou diretamente
+por meio do executável, informando como parâmetro o *path* para um arquivo JSON que contenha a
+definição da sétupla da Máquina de Turing. O formato do arquivo JSON segue o exemplo à seguir:
+
+```json
+{
+  "alphabet": ["0", "1", "X", "Y", "B"],
+  "blank_symbol": "B",
+  "input_symbols": ["0", "1"],
+  "states": ["q0", "q1", "q2", "q3", "q4"],
+  "initial_state": "q0",
+  "final_states":["q3"],
+  "transitions":[
+    {
+      "from_state":"q0",
+      "read_symbol":"0",
+      "write_symbol":"X",
+      "move_to":"R",
+      "next_state":"q1"
+    },
+    // ...
+  ]
+}
+```
+
+Esse exemplo espera que os dados sigam a definição formal de uma Máquina de Turing, como
+definido na [página de Wikipedia](https://en.wikipedia.org/wiki/Turing_machine#Formal_definition).
