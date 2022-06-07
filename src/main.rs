@@ -11,12 +11,12 @@ use tui::{
 };
 
 fn main() -> Result<()> {
-    let mut args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
         eprintln!("Passe como argumento apenas o path do arquivo da sétupla");
         process::exit(1);
     }
-    let file_path = args.pop().unwrap();
+    let file_path = &args[1];
     let file_contents = fs::read_to_string(file_path)?;
     let sep = Septuple::from_json(&file_contents)?;
     if let Err(err) = sep.valid() {

@@ -101,10 +101,10 @@ impl Machine<'_> {
     /// Desfaz a última transição aplicada na máquina.
     /// Caso não haja transição para ser desfeita, retornar [`Err`].
     pub fn undo_transition(&mut self) -> Result<(), NoUndoError> {
-        if self.undos.is_empty() {
-            return Err(NoUndoError);
-        }
-        let undo = self.undos.pop().unwrap();
+        let undo = match self.undos.pop() {
+            Some(undo) => undo,
+            None => return Err(NoUndoError),
+        };
         if undo.pop {
             self.tape.pop();
         }
@@ -126,10 +126,11 @@ impl Machine<'_> {
         if self.in_final_state() {
             return Some(Acceptance::Accepted);
         }
-        if self.get_transition().is_none() {
-            return Some(Acceptance::Rejected);
-        }
-        if self.limited_left(self.get_transition().unwrap()) {
+        let transition = match self.get_transition() {
+            Some(transition) => transition,
+            None => return Some(Acceptance::Rejected),
+        };
+        if self.limited_left(transition) {
             return Some(Acceptance::Rejected);
         }
         None
@@ -140,10 +141,10 @@ impl Machine<'_> {
     /// com movimento para a esquerda.
     fn limited_left(&self, transition: &Transition) -> bool {
         if self.current_position == 0 {
-            if transition.move_to.is_none() {
-                return false;
-            }
-            let movement = transition.move_to.unwrap();
+            let movement = match transition.move_to {
+                Some(movement) => movement,
+                None => return false,
+            };
             if movement == Movement::L {
                 return true;
             }
