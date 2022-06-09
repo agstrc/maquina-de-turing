@@ -60,3 +60,8 @@ definição da sétupla da Máquina de Turing. O formato do arquivo JSON segue o
 
 Esse exemplo espera que os dados sigam a definição formal de uma Máquina de Turing, como
 definido na [página de Wikipedia](https://en.wikipedia.org/wiki/Turing_machine#Formal_definition).
+
+## Screenshots
+
+![Menu da fita](https://i.imgur.com/E8l3Ukp.png)
+![Processamento da fita](https://i.imgur.com/8tWaI10.png)
